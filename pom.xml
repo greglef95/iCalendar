@@ -13,6 +13,18 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>net.sf.biweekly</groupId>
+            <artifactId>biweekly</artifactId>
+            <version>0.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>gr.hua.dit.oop2</groupId>
+            <artifactId>calendar</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 
     <dependencies>
         <dependency>
