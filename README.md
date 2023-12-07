@@ -32,5 +32,3 @@ The above command will print the tasks that have not been completed until now.
 If called without further arguments, the application will start the second function, allowing the user to enter new events and update the ical file.
 
 For more details, refer to the usage guide of the application.
-
-actorswuifgwui

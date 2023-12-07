@@ -19,14 +19,7 @@
             <artifactId>biweekly</artifactId>
             <version>0.6.4</version>
         </dependency>
-        <dependency>
-            <groupId>gr.hua.dit.oop2</groupId>
-            <artifactId>calendar</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-    </dependencies>
 
-    <dependencies>
         <dependency>
             <groupId>gr.hua.dit.oop2.calendar</groupId>
             <artifactId>calendarApp</artifactId>
