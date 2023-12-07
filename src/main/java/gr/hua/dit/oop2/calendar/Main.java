@@ -5,6 +5,3 @@ public class Main {
         System.out.println("Hello world!");
     }
 }
-
-
-// to mouni ths manas tou git hub pou tha eprepe na legetai porn hub
