@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
-
 import gr.hua.dit.oop2.calendar.TimeService;
 import gr.hua.dit.oop2.calendar.TimeTeller;
 
