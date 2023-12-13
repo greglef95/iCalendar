@@ -18,9 +18,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import gr.hua.dit.oop2.calendar.TimeService;
-import gr.hua.dit.oop2.calendar.TimeTeller;
-
 
 public class Calendar {
 
@@ -33,6 +30,30 @@ public class Calendar {
     private List<VTodo> sortedTasks;
 
     public Calendar() {
+    }
+
+    // read the ical file
+    private static String readFile(String filePath) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(filePath));
+        return new String(encoded);
+    }
+
+    // change the format from DateStart to LocalDateTime
+    static LocalDateTime convertDateStartToLocalDateTime(DateStart dateStart) {
+        Date date = dateStart.getValue();
+        return LocalDateTime.ofInstant(date.toInstant(), java.time.ZoneId.systemDefault());
+    }
+
+    // change the format from DateDue to LocalDateTime
+    static LocalDateTime convertDateDueToLocalDateTime(DateDue dateDue) {
+        Date date = dateDue.getValue();
+        return LocalDateTime.ofInstant(date.toInstant(), java.time.ZoneId.systemDefault());
+    }
+
+    // change the format from DateEnd to LocalDateTime
+    static LocalDateTime convertDateEndToLocalDateTime(DateEnd dateEnd) {
+        Date date = dateEnd.getValue();
+        return LocalDateTime.ofInstant(date.toInstant(), java.time.ZoneId.systemDefault());
     }
 
     // this is the method that is called from the others to display each time the right events
@@ -691,29 +712,5 @@ public class Calendar {
                 notFinished = false;
             }
         }
-    }
-
-    // read the ical file
-    private static String readFile(String filePath) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(filePath));
-        return new String(encoded);
-    }
-
-    // change the format from DateStart to LocalDateTime
-    static LocalDateTime convertDateStartToLocalDateTime(DateStart dateStart) {
-        Date date = dateStart.getValue();
-        return LocalDateTime.ofInstant(date.toInstant(), java.time.ZoneId.systemDefault());
-    }
-
-    // change the format from DateDue to LocalDateTime
-    static LocalDateTime convertDateDueToLocalDateTime(DateDue dateDue) {
-        Date date = dateDue.getValue();
-        return LocalDateTime.ofInstant(date.toInstant(), java.time.ZoneId.systemDefault());
-    }
-
-    // change the format from DateEnd to LocalDateTime
-    static LocalDateTime convertDateEndToLocalDateTime(DateEnd dateEnd) {
-        Date date = dateEnd.getValue();
-        return LocalDateTime.ofInstant(date.toInstant(), java.time.ZoneId.systemDefault());
     }
 }
