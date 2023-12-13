@@ -10,7 +10,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <repositories>
@@ -137,7 +137,7 @@
                                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                                 <addClasspath>true</addClasspath>
                                 <classpathPrefix>lib/</classpathPrefix>
-                                <mainClass>gr.dit.hua.calendar.Main</mainClass>
+                                <mainClass>gr.hua.dit.oop2.calendar.Main</mainClass>
                             </manifest>
                         </archive>
                     </configuration>

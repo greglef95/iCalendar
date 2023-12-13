@@ -7,15 +7,19 @@ public class Main {
         Calendar calendar = new Calendar();
         String filePath = "";
 
-        // check length of the given arguments
-        if (args.length > 2) {
+        // check the length of the given arguments
+        if (args.length == 0) {
+            System.out.println("Please provide at least one argument.");
+            System.exit(1);
+        } else if (args.length > 2) {
             System.out.println("Please do not provide more than two arguments.");
             System.exit(1);
         } else if (args.length == 2) {
             filePath = args[1];
-        }else {
+        } else {
             filePath = args[0];
         }
+
 
 
         try {
@@ -23,7 +27,7 @@ public class Main {
             if (!filePath.endsWith(".ics")) {
                 throw new IllegalArgumentException("Please provide an iCal file (with extension .ics).");
             }
-            if(args.length == 2) {
+            if (args.length == 2) {
                 switch (args[0]) {
                     case "day":
                         calendar.findDayEvents(filePath);
