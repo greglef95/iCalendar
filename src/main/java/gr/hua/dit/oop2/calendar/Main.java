@@ -7,28 +7,28 @@ public class Main {
         Calendar calendar = new Calendar();
         String filePath = "";
 
-        // check the length of the given arguments
-        if (args.length == 0) {
+        // Check the arguments's number provided
+        if (args.length > 2) {
+            System.out.println("Please provide at most two arguments.");
+            System.exit(1);
+        } else if (args.length < 1) {
             System.out.println("Please provide at least one argument.");
             System.exit(1);
-        } else if (args.length > 2) {
-            System.out.println("Please do not provide more than two arguments.");
-            System.exit(1);
-        } else if (args.length == 2) {
-            filePath = args[1];
         } else {
-            filePath = args[0];
+            filePath = args[args.length - 1];
         }
 
-
-
         try {
-            // check if the file ends with ".ics"
+            // Check if the file ends with ".ics"
             if (!filePath.endsWith(".ics")) {
                 throw new IllegalArgumentException("Please provide an iCal file (with extension .ics).");
             }
-            if (args.length == 2) {
-                switch (args[0]) {
+
+            if (args.length == 1) {
+                calendar.createEvent(filePath);
+            } else {
+                String eventType = args[0];
+                switch (eventType) {
                     case "day":
                         calendar.findDayEvents(filePath);
                         break;
@@ -54,7 +54,7 @@ public class Main {
                         calendar.findDueEvents(filePath);
                         break;
                     default:
-                        System.out.println("Invalid input. Please try one of the following as the first argument if you want to view events:");
+                        System.out.println("Invalid input. Please use one of the following as the first argument:");
                         System.out.println("  - day");
                         System.out.println("  - week");
                         System.out.println("  - month");
@@ -65,8 +65,6 @@ public class Main {
                         System.out.println("  - due");
                         break;
                 }
-            } else {
-                calendar.createEvent(filePath);
             }
         } catch (IllegalArgumentException e) {
             System.err.println("Error: " + e.getMessage());
