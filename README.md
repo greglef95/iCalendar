@@ -1,34 +1,45 @@
-# calendarApp
+# CalendarApp
 
-# Commands for Calendar (calendar)
+This Java project, allows users to manage calendars, events, and tasks using `.ics` files.
+### Project uses:
+1. UTF-8 encoding <li>Maven management.
 
-This console-based calendar application has two main functionalities outlined below.
+## Getting Started
 
-## 1. Displaying Event Data
+### Installation
 
-The first function takes 2 arguments:
+1. Run Main Class to create .target folder in your project
+2. Ensure you have Maven installed. Use the following command to create the necessary JAR file:
 
-- `day`: Prints events until the end of the day.
-- `week`: Prints events until the end of the week.
-- `month`: Prints events until the end of the month.
-- `pastday`: Prints events from the beginning of the day until now.
-- `pastweek`: Prints events from the beginning of the week until now.
-- `pastmonth`: Prints events from the beginning of the month until now.
-- `todo`: Prints tasks that are unfinished and have not passed the deadline.
-- `due`: Prints tasks that are unfinished and have passed the deadline.
+```bash
+mvn clean install
+```
+# FAQ
+## How-to RUN the CalendarApp?
+### View Calendar Events
+To view events in the calendar based on different timeframes (day, week, month, pastday, pastweek, pastmonth, due, todo), use the following command:
 
-## 2. Updating Calendar with New Events
+```bash
+java -jar target/CalendarApp-1.0-SNAPSHOT.jar <timeframe> <your-ics-file>
+```
+Replace <timeframe> with one of the options mentioned above and <your-ics-file> with the .ics file name. If the file is not in the project folder, provide the absolute path.
 
-The second function takes 1 argument, the ical file name. For example:
+## Create or Update Calendar
+To create a new calendar or update an existing one with events/tasks, use:
 
-java -jar calendar.jar day mycal.ics
+```bash
+java -jar target/CalendarApp-1.0-SNAPSHOT.jar <your-ics-file>
+```
+Replace <your-ics-file> with the .ics file name. If the file is not in the project folder, provide the absolute path. If the file doesn't exist, the app will create it and add new events/tasks; otherwise, it will update the existing file.
 
-The above command will read the mycal.ics file and print the events until the end of the day.
+## Our .ics file
+We have our oop2.ics file in main folder
 
-java -jar calendar.jar due mycal.ics
+```bash
+java -jar target/CalendarApp-1.0-SNAPSHOT.jar month oop2.ics
+```
 
-The above command will print the tasks that have not been completed until now.
-
-If called without further arguments, the application will start the second function, allowing the user to enter new events and update the ical file.
-
-For more details, refer to the usage guide of the application.
+#### Developers
+1. 21451 Greg Lefkelis<li>
+22068 Ioannis Mavrodimos <li>
+22069 Christos Midanis
