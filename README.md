@@ -1,34 +1,94 @@
-# calendarApp
+CalendarApp
+===========
 
-# Commands for Calendar (calendar)
+The CalendarApp is a Java-based project designed to manage calendars, events, and tasks using .ics files. 
 
-This console-based calendar application has two main functionalities outlined below.
+It leverages UTF-8 encoding and Maven for project management.
 
-## 1. Displaying Event Data
+Getting Started
+---------------
 
-The first function takes 2 arguments:
+### 1. Installation
 
-- `day`: Prints events until the end of the day.
-- `week`: Prints events until the end of the week.
-- `month`: Prints events until the end of the month.
-- `pastday`: Prints events from the beginning of the day until now.
-- `pastweek`: Prints events from the beginning of the week until now.
-- `pastmonth`: Prints events from the beginning of the month until now.
-- `todo`: Prints tasks that are unfinished and have not passed the deadline.
-- `due`: Prints tasks that are unfinished and have passed the deadline.
+1.  Run the Main Class to create a `.target` folder in your project.
 
-## 2. Updating Calendar with New Events
+2.  Ensure you have Maven installed.
 
-The second function takes 1 argument, the ical file name. For example:
+3.  Use the following command to create the necessary JAR file: `mvn clean install`
 
-java -jar calendar.jar day mycal.ics
 
-The above command will read the mycal.ics file and print the events until the end of the day.
+### 2. Run the CalendarApp?
 
-java -jar calendar.jar due mycal.ics
+#### View Calendar Events
 
-The above command will print the tasks that have not been completed until now.
+To view events in the calendar based on different timeframes (day, week, month, pastday, pastweek, pastmonth, due, todo), execute the following command:
 
-If called without further arguments, the application will start the second function, allowing the user to enter new events and update the ical file.
+`
+java -jar target/CalendarApp-1.0-SNAPSHOT.jar <timeframe> <your-ics-file>
+`
 
-For more details, refer to the usage guide of the application.
+#### Let's Run our example `oop2.ics` file.
+`Just Copy the Code`
+```bash
+java -jar target/CalendarApp-1.0-SNAPSHOT.jar month oop2.ics
+```
+Replace `<timeframe>` with one of the options mentioned above and `<your-ics-file>` with the .ics file name. If the file is not in the project folder, provide the absolute path.
+
+### 3. Create or Update Calendar
+
+To create a new calendar or update an existing one with events/tasks, use:
+
+```bash
+java -jar target/CalendarApp-1.0-SNAPSHOT.jar <your-ics-file>
+```
+
+Replace `<your-ics-file>` with the .ics file name. If the file is not in the project folder, provide the absolute path. If the file doesn't exist, the app will create it and add new events/tasks; otherwise, it will update the existing file.
+
+# -------------------------------------------------------
+
+
+
+# Project Structure
+
+1.  EventLists.java: Contains methods for sorting events based on their start or due dates.
+2.  Main.java: Houses the main logic of the application, interacting with the Calendar class to perform operations based on user input through command-line arguments.
+
+## Main Components
+
+-   EventLists.java:
+
+    -   Contains a method `sortByDate` that sorts a list of events based on their start or due dates.
+    -   Uses generics to handle both VEvent and VTodo objects.
+    -   Implements a private method `getDateTime` to extract the start/due date from events.
+-   Main.java:
+
+    -   Initializes a Calendar object.
+    -   Validates command-line arguments and file paths.
+    -   Parses the command-line arguments and directs the calendar operations accordingly.
+    -   Catches exceptions related to argument validation and file I/O.
+
+## Functionality
+
+-   Calendar Operations:
+
+    -   Creation: Handles event creation if only a file path is provided.
+    -   Query Operations: Supports various queries like events for a day, week, month, past periods, to-do events, and due events based on the provided command-line arguments.
+-   Error Handling:
+
+    -   Validates the number of arguments provided.
+    -   Checks if the file path ends with ".ics" for compatibility.
+    -   Catches and displays specific error messages for argument and file-related issues.
+
+
+
+License Information
+-------------------
+
+The software developed under the auspices of the Department of Informatics and Telecommunications (DIT) at the University of Athens (HUA).
+
+### HUA Developers
+```
+21451 Grigorios Lefkelis
+22068 Ioannis Mavrodimos
+22069 Christos Midanis
+```

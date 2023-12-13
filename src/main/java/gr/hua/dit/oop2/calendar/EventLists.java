@@ -2,11 +2,12 @@ package gr.hua.dit.oop2.calendar;
 
 import biweekly.component.VEvent;
 import biweekly.component.VTodo;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static gr.hua.dit.oop2.calendar.Calendar.convertDateStartToLocalDateTime;
 import static gr.hua.dit.oop2.calendar.Calendar.convertDateDueToLocalDateTime;
+import static gr.hua.dit.oop2.calendar.Calendar.convertDateStartToLocalDateTime;
 
 public class EventLists {
 
