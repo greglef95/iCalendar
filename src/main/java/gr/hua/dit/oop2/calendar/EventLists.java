@@ -10,10 +10,6 @@ import static gr.hua.dit.oop2.calendar.Calendar.convertDateDueToLocalDateTime;
 
 public class EventLists {
 
-    public EventLists() {
-        // Constructor (if needed)
-    }
-
     // Sorts the events based on the closer Start/Due date to the current
     public static <T> List<T> sortByDate(List<T> events) {
         events.sort((event1, event2) -> {

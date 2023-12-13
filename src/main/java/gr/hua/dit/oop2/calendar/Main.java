@@ -67,9 +67,9 @@ public class Main {
                 }
             }
         } catch (IllegalArgumentException e) {
-            System.err.println("Error: " + e.getMessage());
+            System.err.println("Argument ERROR: " + e.getMessage());
         } catch (IOException e) {
-            System.err.println("Error reading the file: " + e.getMessage());
+            System.err.println("File read ERROR: " + e.getMessage());
         }
     }
 }
