@@ -44,8 +44,8 @@ java -jar target/CalendarApp-1.0-SNAPSHOT.jar <your-ics-file>
 
 Replace `<your-ics-file>` with the .ics file name. If the file is not in the project folder, provide the absolute path. If the file doesn't exist, the app will create it and add new events/tasks; otherwise, it will update the existing file.
 
--------------------------------------------------------
-======
+# -------------------------------------------------------
+
 
 
 # Project Structure
