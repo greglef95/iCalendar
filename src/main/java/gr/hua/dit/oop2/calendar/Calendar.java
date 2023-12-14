@@ -17,9 +17,6 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import gr.hua.dit.oop2.calendar.TimeService;
-import gr.hua.dit.oop2.calendar.TimeTeller;
-
 
 public class Calendar {
 
@@ -30,9 +27,6 @@ public class Calendar {
     private List<VTodo> tasks;
 
     private List<VTodo> sortedTasks;
-
-    public Calendar() {
-    }
 
     // read the ical file
     private static String readFile(String filePath) throws IOException {
@@ -447,9 +441,9 @@ public class Calendar {
         }
     }
 
-    // Method to display todo tasks based on their completion status and deadline
+    // Method to display to do tasks based on their completion status and deadline
     public void findToDoEvents(String filePath) throws IOException {
-        // Fetch todo tasks based on their completion status and deadline and display them
+        // Fetch to do tasks based on their completion status and deadline and display them
         ICalendar ical = Biweekly.parse(readFile(filePath)).first(); // Parsing the iCalendar file
 
         TimeTeller timeTeller = TimeService.getTeller(); // Fetching TimeTeller instance

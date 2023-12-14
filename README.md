@@ -51,6 +51,7 @@ Replace `<your-ics-file>` with the .ics file name. If the file is not in the pro
 # Project Structure
 
 1.  EventLists.java: Contains methods for sorting events based on their start or due dates.
+2.  Calendar.java: Creates Events & Tasks, with extended functionalities and operations.
 2.  Main.java: Houses the main logic of the application, interacting with the Calendar class to perform operations based on user input through command-line arguments.
 
 ## Main Components
@@ -66,6 +67,23 @@ Replace `<your-ics-file>` with the .ics file name. If the file is not in the pro
     -   Validates command-line arguments and file paths.
     -   Parses the command-line arguments and directs the calendar operations accordingly.
     -   Catches exceptions related to argument validation and file I/O.
+-   Calendar.java:
+
+    -   With the `find`x`Events(filePath)`, app can retrieve and print events and tasks for the current day from the iCalendar file.
+    -   The `createEvent(filePath)`, allows users to interactively create new events or tasks and save them in the iCalendar file.
+
+    - ### #Optional Usage
+    
+1.  Parsing iCal File:
+    -   `Biweekly.parse(readFile(filePath)).first()` returns an `Optional<ICalendar>`.
+    -   `Optional.ofNullable(ical)` checks if the `ical` variable is null or not before performing operations on it.
+2.  Filtering Events and Tasks:
+    -   Streams with `Optional` are used to filter events and tasks based on their occurrence within different timeframes (`findMonthEvents`, `findPastDay`, `findPastWeek`, `findPastMonth`, `findToDoEvents`, `findDueEvents`).
+3.  Handling Empty iCal Files:
+    -   The absence of valid iCal data results in a null check (`if (ical != null)`) before attempting further processing.
+    -   It stops the `TimeService` if the iCal file is not null, implying that if there's no valid iCal data, the time service won't be stopped.
+4.  Returning Filtered Lists:
+    -   The filtered events and tasks are collected into lists using `Collectors.toList()`. These lists are stored in class variables (`events` and `tasks`) after filtering based on specific conditions.
 
 ## Functionality
 
