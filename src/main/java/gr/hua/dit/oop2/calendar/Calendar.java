@@ -528,17 +528,17 @@ public class Calendar {
         boolean notFinished = true;
         while (notFinished) {
             // Prompt the user to create a task or an event
-            System.out.print("\nDo you want to create a task or another event? (task/other): ");
+            System.out.print("\nDo you want to create a task or another event? (task/eve): ");
             String eventAnswer = scanner.nextLine().trim().toLowerCase();
 
             // Loop to validate user input for creating a task or an event
-            while (!eventAnswer.equals("task") && !eventAnswer.equals("other")) {
-                System.out.print("Invalid input. Please enter 'task' or 'other': ");
+            while (!eventAnswer.equals("task") && !eventAnswer.equals("eve")) {
+                System.out.print("Invalid input. Please enter 'task' or 'eve': ");
                 eventAnswer = scanner.nextLine().trim().toLowerCase();
             }
 
             // Create a new event or task based on user input
-            if (eventAnswer.equalsIgnoreCase("other")) {
+            if (eventAnswer.equalsIgnoreCase("eve")) {
                 createNewEvent(ical, scanner);
             } else {
                 createNewTask(ical, scanner);
@@ -679,8 +679,6 @@ public class Calendar {
 
         // Adding the new task to the iCalendar
         ical.addTodo(task);
-        System.out.println("\nSuccessfully created a new task!");
+        System.out.println("\nNew Task '" + title + "' Added Successfully created a new task!");
     }
-
-
 }
