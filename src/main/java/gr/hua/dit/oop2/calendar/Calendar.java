@@ -54,6 +54,7 @@ public class Calendar {
 
     // this is the method that is called from the others to display each time the right events
     public void displayEvents(List<VEvent> events, List<VTodo> tasks, String message) {
+        System.out.println("\n Welcome to >_ iCalendar App");
         System.out.println("\n*** " + message + " ***\n");
 
         for (VEvent event : events) {
@@ -62,14 +63,15 @@ public class Calendar {
             DateEnd dateEnd = event.getDateEnd();
             Description description = event.getDescription();
 
-            System.out.println("**********************");
+            System.out.println("-----------------------");
             System.out.println("Title: " + summary.getValue());
             System.out.println("Description: " + description.getValue());
             System.out.println("Start Date and Time: " + dateStart.getValue());
             if (dateEnd != null) {
                 System.out.println("End Date and Time: " + dateEnd.getValue());
             }
-            System.out.println("**********************");
+            System.out.println("-----------------------");
+            System.out.println("\nProject Developed by: Greg, Giannis & Christos");
         }
 
         for (VTodo task : tasks) {
@@ -78,13 +80,13 @@ public class Calendar {
             Description description = task.getDescription();
             Status status = task.getStatus();
 
-            System.out.println("**********************");
+            System.out.println("-----------------------");
             System.out.println("Title: " + summary.getValue());
             System.out.println("Description: " + description.getValue());
             System.out.println("Deadline of the task: " + dateDue.getValue());
             System.out.println("Status of the task: " + status.getValue());
-            System.out.println("**********************");
-
+            System.out.println("-----------------------");
+            System.out.println("\nProject Developed by: Greg, Giannis & Christos");
         }
     }
 
@@ -514,8 +516,10 @@ public class Calendar {
         // Check if the file exists and create a new one if not
         if (!file.exists()) {
             Files.createFile(file.toPath());
+            System.out.println("\n Welcome to >_ iCalendar App");
             System.out.println("\nCreated the file: " + file);
         } else {
+            System.out.println("\n Welcome to >_ iCalendar App");
             System.out.println("\nOpened the file: " + filePath);
         }
 
@@ -546,16 +550,16 @@ public class Calendar {
 
             // Ask the user if they want to add more events or tasks
             System.out.print("\nDo you want to add more events? (y/n): ");
-            String answer = scanner.nextLine().trim().toLowerCase();
+            String choice = scanner.nextLine().trim().toLowerCase();
 
             // Loop to validate user input for adding more events
-            while (!answer.equals("y") && !answer.equals("n")) {
+            while (!choice.equals("y") && !choice.equals("n")) {
                 System.out.print("Invalid input. Please enter 'y' or 'n': ");
-                answer = scanner.nextLine().trim().toLowerCase();
+                choice = scanner.nextLine().trim().toLowerCase();
             }
 
             // Stop the loop if the user doesn't want to add more events
-            if (answer.equals("n")) {
+            if (choice.equals("n")) {
                 notFinished = false;
             }
         }
@@ -563,31 +567,33 @@ public class Calendar {
         // Write the events to the iCal file and display a message
         Biweekly.write(ical).go(file);
         System.out.println("\nEvents saved to file.");
+        System.out.println("\nProject Developed by: Greg, Giannis & Christos");
+
     }
 
     // Method for creating a new event
     private void createNewEvent(ICalendar ical, Scanner scanner) {
         VEvent event = new VEvent();
-        System.out.println("\nCreating a new Event ... ");
+        System.out.println("\nLet's create a new event... ");
 
         // Input for event title
-        System.out.print("\n-Enter a title for the event: ");
+        System.out.print("\n--Enter Event's Title: ");
         String title = scanner.nextLine();
 
         // Validation for non-empty title
         while (title == null || title.trim().isEmpty()) {
-            System.out.print("-Please enter a non-empty title for the event: ");
+            System.out.print("--Error: Event's Title can't be EMPTY! Try Again");
             title = scanner.nextLine();
         }
 
         event.setSummary(title);
 
         // Input for event description
-        System.out.print("-Enter a description for the event: ");
+        System.out.print("--Enter a description for this event: ");
         event.setDescription(scanner.nextLine());
 
         // Input for event start date and time
-        System.out.print("-Enter the start date and time of the event (yyyy-MM-dd HH:mm): ");
+        System.out.print("--Enter the start date and time of the event (yyyy-MM-dd HH:mm): ");
         boolean validStartDate = false;
         LocalDateTime startDateTime = null;
 
@@ -599,7 +605,7 @@ public class Calendar {
                         .ofPattern("yyyy-MM-dd HH:mm"));
                 validStartDate = true;
             } catch (DateTimeParseException e) {
-                System.err.print("Error parsing date and time. Please enter the correct format " +
+                System.err.print("ERROR: Invalid Format. Please enter the correct format " +
                         "(yyyy-MM-dd HH:mm --> year-month-day hours:minutes): ");
             }
         }
@@ -607,7 +613,7 @@ public class Calendar {
         event.setDateStart(new DateStart(Date.from(startDateTime.atZone(java.time.ZoneId.systemDefault()).toInstant())));
 
         // Input for event end date and time (optional)
-        System.out.print("-Enter the end date and time of the event (optionally, press Enter to skip): ");
+        System.out.print("--Enter the end date and time of the event (optionally, press Enter to skip): ");
         String endDateTimeStr = scanner.nextLine().trim();
 
         if (!endDateTimeStr.isEmpty()) {
@@ -621,7 +627,7 @@ public class Calendar {
                             .ofPattern("yyyy-MM-dd HH:mm"));
                     validEndDate = true;
                 } catch (DateTimeParseException e) {
-                    System.err.print("Error parsing date and time. Please enter the correct format " +
+                    System.err.print("ERROR: Invalid Format. Please enter the correct format " +
                             "(yyyy-MM-dd HH:mm --> year-month-day hours:minutes): ");
                     endDateTimeStr = scanner.nextLine().trim();
                 }
@@ -632,32 +638,33 @@ public class Calendar {
 
         // Adding the new event to the iCalendar
         ical.addEvent(event);
-        System.out.println("\nSuccessfully created a new event!");
+        System.out.println("\nNew Task '" + title + "' Added Successfully created a new task!");
+
     }
 
     // Method for creating a new task
     private void createNewTask(ICalendar ical, Scanner scanner) {
         VTodo task = new VTodo();
-        System.out.println("\nCreating a new Task ... ");
+        System.out.println("\nLet's create a new task... ");
 
         // Input for task title
-        System.out.print("\n-Enter a title for the task: ");
+        System.out.print("\nEnter task's title: ");
         String title = scanner.nextLine();
 
         // Validation for non-empty title
         while (title == null || title.trim().isEmpty()) {
-            System.out.print("-Please enter a non-empty title for the task: ");
+            System.out.print("Please enter a non-empty title for the task: ");
             title = scanner.nextLine();
         }
 
         task.setSummary(title);
 
         // Input for task description
-        System.out.print("-Enter a description for the task: ");
+        System.out.print("Enter a description for the task: ");
         task.setDescription(scanner.nextLine());
 
         // Input for task deadline
-        System.out.print("-Enter the deadline of the task (yyyy-MM-dd HH:mm): ");
+        System.out.print("Enter the deadline of the task (yyyy-MM-dd HH:mm): ");
         boolean validDueDate = false;
         LocalDateTime dueDateTime = null;
 
