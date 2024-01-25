@@ -6,6 +6,10 @@ import biweekly.component.VEvent;
 import biweekly.component.VTodo;
 import biweekly.property.*;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,10 +19,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
-public class Calendar {
+public class Calendar extends JFrame {
 
     private List<VEvent> events;
 
@@ -27,6 +32,88 @@ public class Calendar {
     private List<VTodo> tasks;
 
     private List<VTodo> sortedTasks;
+    public Calendar() {
+        // Set up the JFrame
+        setTitle("iCalendar App");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 600);
+
+        // Create a JPanel for displaying information
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new GridLayout(0, 1));
+
+        // Create a JTextArea for displaying events and tasks
+        JTextArea textArea = new JTextArea();
+        textArea.setEditable(false);
+
+        // Create a JScrollPane to add scrolling to the text area
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        infoPanel.add(scrollPane);
+
+        // Create a JButton for triggering the findDayEvents method
+        JButton findEventsButton = new JButton("Find Today's Events");
+        findEventsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    findDayEvents("oop2.ics");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        infoPanel.add(findEventsButton);
+
+        // Add the infoPanel to the JFrame
+        add(infoPanel);
+
+        // Set the JFrame to be visible
+        setVisible(true);
+    }
+    public void displayEventsGUI(List<VEvent> events, List<VTodo> tasks, String message) {
+        StringBuilder output = new StringBuilder("\n Welcome to >_ iCalendar App");
+        output.append("\n*** ").append(message).append(" ***\n");
+
+        for (VEvent event : events) {
+            Summary summary = event.getSummary();
+            DateStart dateStart = event.getDateStart();
+            DateEnd dateEnd = event.getDateEnd();
+            Description description = event.getDescription();
+
+            System.out.println("-----------------------");
+            System.out.println("Title: " + summary.getValue());
+            System.out.println("Description: " + description.getValue());
+            System.out.println("Start Date and Time: " + dateStart.getValue());
+            if (dateEnd != null) {
+                System.out.println("End Date and Time: " + dateEnd.getValue());
+            }
+            System.out.println("-----------------------");
+            System.out.println("\nProject Developed by: Greg, Giannis & Christos");
+        }
+
+        for (VTodo task : tasks) {
+            Summary summary = task.getSummary();
+            DateDue dateDue = task.getDateDue();
+            Description description = task.getDescription();
+            Status status = task.getStatus();
+
+            System.out.println("-----------------------");
+            System.out.println("Title: " + summary.getValue());
+            System.out.println("Description: " + description.getValue());
+            System.out.println("Deadline of the task: " + dateDue.getValue());
+            System.out.println("Status of the task: " + status.getValue());
+            System.out.println("-----------------------");
+            System.out.println("\nProject Developed by: Greg, Giannis & Christos");
+        }
+
+        // Append the developer information to the output
+        output.append("\nProject Developed by: Greg, Giannis & Christos");
+
+        // Set the text of the JTextArea
+        JTextArea textArea = new JTextArea();
+        textArea.setText(output.toString());
+    }
+
 
     // read the ical file
     private static String readFile(String filePath) throws IOException {
@@ -687,5 +774,14 @@ public class Calendar {
         // Adding the new task to the iCalendar
         ical.addTodo(task);
         System.out.println("\nNew Task '" + title + "' Added Successfully created a new task!");
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new Calendar();
+            }
+        });
     }
 }
