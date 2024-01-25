@@ -108,5 +108,5 @@ The software developed under the auspices of the Department of Informatics and T
 ```
 21451 Grigorios Lefkelis
 22068 Ioannis Mavrodimos
-22069 Christos Midanis
+22069 Christos Meidanis
 ```
