@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -17,6 +18,7 @@ public class CalendarGUI {
 
     private Map<String, DefaultListModel<String>> eventLists;
     private JComboBox<String> listSelector;
+    private JList<String> eventsList;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -41,6 +43,9 @@ public class CalendarGUI {
             }
         });
 
+        eventsList = new JList<>();
+        JScrollPane listScrollPane = new JScrollPane(eventsList);
+
         JButton loadButton = new JButton("Load Events");
         loadButton.addActionListener(new ActionListener() {
             @Override
@@ -58,6 +63,7 @@ public class CalendarGUI {
                     for (String event : events) {
                         currentListModel.addElement(event);
                     }
+                    updateEventList(currentListModel.toArray());
                 }
             }
         });
@@ -102,13 +108,18 @@ public class CalendarGUI {
         });
         reminderTimer.start();
 
-        frame.getContentPane().setLayout(new FlowLayout());
-        frame.getContentPane().add(listSelector);
-        frame.getContentPane().add(loadButton);
-        frame.getContentPane().add(newEventButton);
-        frame.getContentPane().add(editEventButton);
-        frame.getContentPane().add(completeTaskButton);
-        frame.getContentPane().add(changeListButton);
+        frame.getContentPane().setLayout(new BorderLayout());
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new FlowLayout());
+        topPanel.add(listSelector);
+        topPanel.add(loadButton);
+        topPanel.add(newEventButton);
+        topPanel.add(editEventButton);
+        topPanel.add(completeTaskButton);
+        topPanel.add(changeListButton);
+
+        frame.getContentPane().add(topPanel, BorderLayout.NORTH);
+        frame.getContentPane().add(listScrollPane, BorderLayout.CENTER);
 
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -125,10 +136,11 @@ public class CalendarGUI {
     }
 
     private void updateEventList(Object[] events) {
-        eventLists.get(listSelector.getSelectedItem()).clear();
+        DefaultListModel<String> currentListModel = new DefaultListModel<>();
         for (Object event : events) {
-            eventLists.get(listSelector.getSelectedItem()).addElement((String) event);
+            currentListModel.addElement((String) event);
         }
+        eventsList.setModel(currentListModel);
     }
 
     private void showNewEventDialog() {
@@ -212,8 +224,6 @@ public class CalendarGUI {
             updateEventList(eventLists.get(selectedList).toArray());
         }
     }
-
-
     private void checkReminders() {
         String selectedList = (String) listSelector.getSelectedItem();
         DefaultListModel<String> currentListModel = eventLists.get(selectedList);
@@ -225,7 +235,7 @@ public class CalendarGUI {
             for (int i = 0; i < currentListModel.getSize(); i++) {
                 String event = currentListModel.getElementAt(i);
                 try {
-                    String eventTimeStr = event.substring(0, 5); // Assuming time is at the beginning (e.g., "12:30 Event")
+                    String eventTimeStr = event.substring(0, 5);
                     Date eventTime = dateFormat.parse(eventTimeStr);
 
                     if (now.before(eventTime)) {
@@ -236,8 +246,8 @@ public class CalendarGUI {
                             JOptionPane.showMessageDialog(null, "Reminder: " + event);
                         }
                     }
-                } catch (Exception e) {
-                    // Handle parsing exceptions or unexpected event format
+                } catch (ParseException pe) {
+                    pe.printStackTrace();
                 }
             }
         }
