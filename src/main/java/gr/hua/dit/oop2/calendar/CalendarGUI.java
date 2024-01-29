@@ -21,6 +21,14 @@ public class CalendarGUI {
     private JList<String> eventsList;
     private JLabel currentTimeLabel;
 
+    // Added enumeration for sorting options
+    private enum SortOption {
+        BY_TIME, BY_NAME
+    }
+
+    // Current sort option
+    private SortOption currentSortOption = SortOption.BY_TIME;
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             CalendarGUI app = new CalendarGUI();
@@ -110,6 +118,14 @@ public class CalendarGUI {
             }
         });
 
+        JButton sortButton = new JButton("Sort Events");
+        sortButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showSortOptionsDialog();
+            }
+        });
+
         Timer reminderTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -127,6 +143,7 @@ public class CalendarGUI {
         topPanel.add(editEventButton);
         topPanel.add(completeTaskButton);
         topPanel.add(changeListButton);
+        topPanel.add(sortButton);
 
         frame.getContentPane().add(topPanel, BorderLayout.NORTH);
         frame.getContentPane().add(listScrollPane, BorderLayout.CENTER);
@@ -152,6 +169,47 @@ public class CalendarGUI {
             currentListModel.addElement((String) event);
         }
         eventsList.setModel(currentListModel);
+
+        // Sort the events based on the current sort option
+        sortEvents(currentListModel);
+    }
+
+    private void sortEvents(DefaultListModel<String> model) {
+        switch (currentSortOption) {
+            case BY_TIME:
+                sortByTime(model);
+                break;
+            case BY_NAME:
+                sortByName(model);
+                break;
+            default:
+                // Default to sorting by time
+                sortByTime(model);
+                break;
+        }
+    }
+
+    private void sortByTime(DefaultListModel<String> model) {
+        List<String> events = Collections.list(model.elements());
+        events.sort(Comparator.comparing(this::getEventTime));
+        model.clear();
+        for (String event : events) {
+            model.addElement(event);
+        }
+    }
+
+    private void sortByName(DefaultListModel<String> model) {
+        List<String> events = Collections.list(model.elements());
+        events.sort(Comparator.naturalOrder());
+        model.clear();
+        for (String event : events) {
+            model.addElement(event);
+        }
+    }
+
+    private String getEventTime(String event) {
+        // Extract and return the time part of the event (assuming the time is at the beginning)
+        return event.substring(0, 5);
     }
 
     private void updateTimeLabel() {
@@ -239,6 +297,23 @@ public class CalendarGUI {
             listSelector.setSelectedItem(selectedList);
             updateEventList(eventLists.get(selectedList).toArray());
         }
+    }
+
+    private void showSortOptionsDialog() {
+        Object[] options = {"Sort by Time", "Sort by Name"};
+        int selectedOption = JOptionPane.showOptionDialog(null,
+                "Select Sorting Option:", "Sort Events", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+        if (selectedOption == 0) {
+            currentSortOption = SortOption.BY_TIME;
+        } else if (selectedOption == 1) {
+            currentSortOption = SortOption.BY_NAME;
+        }
+
+        // Re-sort events based on the new sort option
+        DefaultListModel<String> currentListModel = eventLists.get(listSelector.getSelectedItem());
+        sortEvents(currentListModel);
     }
 
     private void checkReminders() {
