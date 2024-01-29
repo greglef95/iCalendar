@@ -20,13 +20,12 @@ public class CalendarGUI {
     private JComboBox<String> listSelector;
     private JList<String> eventsList;
     private JLabel currentTimeLabel;
+    private JLabel currentDateLabel;
 
-    // Added enumeration for sorting options
     private enum SortOption {
         BY_TIME, BY_NAME
     }
 
-    // Current sort option
     private SortOption currentSortOption = SortOption.BY_TIME;
 
     public static void main(String[] args) {
@@ -56,6 +55,8 @@ public class CalendarGUI {
         JScrollPane listScrollPane = new JScrollPane(eventsList);
 
         currentTimeLabel = new JLabel();
+        currentDateLabel = new JLabel();
+        updateDateLabel();
         Timer clockTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -134,7 +135,6 @@ public class CalendarGUI {
         });
         reminderTimer.start();
 
-        frame.getContentPane().setLayout(new BorderLayout());
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout());
         topPanel.add(listSelector);
@@ -145,9 +145,16 @@ public class CalendarGUI {
         topPanel.add(changeListButton);
         topPanel.add(sortButton);
 
+        //bottom panel styling
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.add(currentDateLabel, BorderLayout.NORTH);
+        bottomPanel.add(currentTimeLabel, BorderLayout.SOUTH);
+
+
+        frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().add(topPanel, BorderLayout.NORTH);
         frame.getContentPane().add(listScrollPane, BorderLayout.CENTER);
-        frame.getContentPane().add(currentTimeLabel, BorderLayout.SOUTH);
+        frame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);  // Added bottom panel
 
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -171,6 +178,155 @@ public class CalendarGUI {
         eventsList.setModel(currentListModel);
 
         // Sort the events based on the current sort option
+        sortEvents(currentListModel);
+    }
+
+    private void updateTimeLabel() {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        currentTimeLabel.setText("Current Time: " + timeFormat.format(new Date()));
+    }
+
+    private void updateDateLabel() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM d, yyyy");
+        currentDateLabel.setText("Current Date: " + dateFormat.format(new Date()));
+    }
+
+    private void showNewEventDialog() {
+        JDialog newEventDialog = new JDialog();
+        newEventDialog.setTitle("New Event");
+
+        JTextField eventNameField = new JTextField(20);
+        JTextField eventTimeField = new JTextField(5);
+        JTextField eventDateField = new JTextField(10);  // Added field for event date
+
+        JButton addButton = new JButton("Add Event");
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String eventName = eventNameField.getText();
+                String eventTime = eventTimeField.getText();
+                String eventDate = eventDateField.getText();  // Get the event date
+
+                if (!eventName.isEmpty() && isValidTimeFormat(eventTime) && isValidDateFormat(eventDate)) {
+                    String newEvent = eventDate + " " + eventTime + " " + eventName;
+                    String selectedList = (String) listSelector.getSelectedItem();
+                    DefaultListModel<String> currentListModel = eventLists.get(selectedList);
+                    currentListModel.addElement(newEvent);
+
+                    // Update the event list and sort by time
+                    updateEventList(currentListModel.toArray());
+                    newEventDialog.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(newEventDialog, "Invalid input. Event name cannot be empty, " +
+                            "time should be in HH:mm format, and date should be in yyyy-MM-dd format.");
+                }
+            }
+        });
+
+        newEventDialog.setLayout(new FlowLayout());
+        newEventDialog.add(new JLabel("Event Name:"));
+        newEventDialog.add(eventNameField);
+        newEventDialog.add(new JLabel("Event Time (HH:mm):"));
+        newEventDialog.add(eventTimeField);
+        newEventDialog.add(new JLabel("Event Date (yyyy-MM-dd):"));
+        newEventDialog.add(eventDateField);
+        newEventDialog.add(addButton);
+
+        newEventDialog.setSize(350, 150);
+        newEventDialog.setLocationRelativeTo(null);
+        newEventDialog.setVisible(true);
+    }
+
+    private boolean isValidTimeFormat(String time) {
+        try {
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+            timeFormat.parse(time);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    private boolean isValidDateFormat(String date) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateFormat.setLenient(false);
+
+            // Attempt to parse the entire date string
+            dateFormat.parse(date);
+
+            // If parsing succeeds without throwing an exception, the date is valid
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    private void showEditEventDialog() {
+        String selectedList = (String) listSelector.getSelectedItem();
+        DefaultListModel<String> currentListModel = eventLists.get(selectedList);
+
+        if (currentListModel.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No events to edit.");
+            return;
+        }
+
+        String selectedEvent = eventsList.getSelectedValue();
+
+        if (selectedEvent != null) {
+            String editedEvent = JOptionPane.showInputDialog("Edit Event:", selectedEvent);
+
+            if (editedEvent != null && !editedEvent.isEmpty()) {
+                currentListModel.setElementAt(editedEvent, eventsList.getSelectedIndex());
+                updateEventList(currentListModel.toArray());
+            }
+        }
+    }
+
+    private void completeTask() {
+        String selectedList = (String) listSelector.getSelectedItem();
+        DefaultListModel<String> currentListModel = eventLists.get(selectedList);
+
+        if (currentListModel.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No tasks to complete.");
+            return;
+        }
+
+        String selectedEvent = eventsList.getSelectedValue();
+
+        if (selectedEvent != null) {
+            currentListModel.removeElement(selectedEvent);
+            updateEventList(currentListModel.toArray());
+        }
+    }
+
+    private void showChangeListDialog() {
+        Object[] options = eventLists.keySet().toArray();
+        String selectedList = (String) JOptionPane.showInputDialog(null,
+                "Select List:", "Change List", JOptionPane.QUESTION_MESSAGE,
+                null, options, options[0]);
+
+        if (selectedList != null) {
+            listSelector.setSelectedItem(selectedList);
+            updateEventList(eventLists.get(selectedList).toArray());
+        }
+    }
+
+    private void showSortOptionsDialog() {
+        Object[] options = {"Sort by Time", "Sort by Name"};
+        int selectedOption = JOptionPane.showOptionDialog(null,
+                "Select Sorting Option:", "Sort Events", JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+        if (selectedOption == 0) {
+            currentSortOption = SortOption.BY_TIME;
+        } else if (selectedOption == 1) {
+            currentSortOption = SortOption.BY_NAME;
+        }
+
+        // Re-sort events based on the new sort option
+        DefaultListModel<String> currentListModel = eventLists.get(listSelector.getSelectedItem());
         sortEvents(currentListModel);
     }
 
@@ -208,112 +364,7 @@ public class CalendarGUI {
     }
 
     private String getEventTime(String event) {
-        // Extract and return the time part of the event (assuming the time is at the beginning)
         return event.substring(0, 5);
-    }
-
-    private void updateTimeLabel() {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        currentTimeLabel.setText("Current Time: " + timeFormat.format(new Date()));
-    }
-
-    private void showNewEventDialog() {
-        JDialog newEventDialog = new JDialog();
-        newEventDialog.setTitle("New Event");
-
-        JTextField eventNameField = new JTextField(20);
-        JButton addButton = new JButton("Add Event");
-
-        addButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String eventName = eventNameField.getText();
-                if (!eventName.isEmpty()) {
-                    String selectedList = (String) listSelector.getSelectedItem();
-                    eventLists.get(selectedList).addElement(eventName);
-                    newEventDialog.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(newEventDialog, "Event name cannot be empty.");
-                }
-            }
-        });
-
-        newEventDialog.setLayout(new FlowLayout());
-        newEventDialog.add(new JLabel("Event Name:"));
-        newEventDialog.add(eventNameField);
-        newEventDialog.add(addButton);
-
-        newEventDialog.setSize(300, 150);
-        newEventDialog.setLocationRelativeTo(null);
-        newEventDialog.setVisible(true);
-    }
-
-    private void showEditEventDialog() {
-        String selectedList = (String) listSelector.getSelectedItem();
-        DefaultListModel<String> currentListModel = eventLists.get(selectedList);
-
-        if (currentListModel.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No events to edit.");
-            return;
-        }
-
-        String selectedEvent = (String) JOptionPane.showInputDialog(null,
-                "Select Event to Edit:", "Edit Event", JOptionPane.QUESTION_MESSAGE,
-                null, currentListModel.toArray(), currentListModel.get(0));
-
-        if (selectedEvent != null) {
-            String editedEvent = JOptionPane.showInputDialog("Edit Event:", selectedEvent);
-            if (editedEvent != null && !editedEvent.isEmpty()) {
-                currentListModel.setElementAt(editedEvent, currentListModel.indexOf(selectedEvent));
-            }
-        }
-    }
-
-    private void completeTask() {
-        String selectedList = (String) listSelector.getSelectedItem();
-        DefaultListModel<String> currentListModel = eventLists.get(selectedList);
-
-        if (currentListModel.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "No tasks to complete.");
-            return;
-        }
-
-        String selectedEvent = (String) JOptionPane.showInputDialog(null,
-                "Select Task to Complete:", "Complete Task", JOptionPane.QUESTION_MESSAGE,
-                null, currentListModel.toArray(), currentListModel.get(0));
-
-        if (selectedEvent != null) {
-            currentListModel.removeElement(selectedEvent);
-        }
-    }
-
-    private void showChangeListDialog() {
-        Object[] options = eventLists.keySet().toArray();
-        String selectedList = (String) JOptionPane.showInputDialog(null,
-                "Select List:", "Change List", JOptionPane.QUESTION_MESSAGE,
-                null, options, options[0]);
-
-        if (selectedList != null) {
-            listSelector.setSelectedItem(selectedList);
-            updateEventList(eventLists.get(selectedList).toArray());
-        }
-    }
-
-    private void showSortOptionsDialog() {
-        Object[] options = {"Sort by Time", "Sort by Name"};
-        int selectedOption = JOptionPane.showOptionDialog(null,
-                "Select Sorting Option:", "Sort Events", JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-
-        if (selectedOption == 0) {
-            currentSortOption = SortOption.BY_TIME;
-        } else if (selectedOption == 1) {
-            currentSortOption = SortOption.BY_NAME;
-        }
-
-        // Re-sort events based on the new sort option
-        DefaultListModel<String> currentListModel = eventLists.get(listSelector.getSelectedItem());
-        sortEvents(currentListModel);
     }
 
     private void checkReminders() {
@@ -322,12 +373,12 @@ public class CalendarGUI {
 
         if (!currentListModel.isEmpty()) {
             Date now = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");  // Updated format
 
             for (int i = 0; i < currentListModel.getSize(); i++) {
                 String event = currentListModel.getElementAt(i);
                 try {
-                    String eventTimeStr = event.substring(0, 5);
+                    String eventTimeStr = event.substring(0, 16); // Assuming time is at the beginning (e.g., "2024-01-30 12:30 Event")
                     Date eventTime = dateFormat.parse(eventTimeStr);
 
                     if (now.before(eventTime)) {
@@ -338,8 +389,9 @@ public class CalendarGUI {
                             JOptionPane.showMessageDialog(null, "Reminder: " + event);
                         }
                     }
-                } catch (ParseException pe) {
-                    pe.printStackTrace();
+                } catch (Exception e) {
+                    // Handle parsing exceptions or unexpected event format
+                    e.printStackTrace();
                 }
             }
         }
