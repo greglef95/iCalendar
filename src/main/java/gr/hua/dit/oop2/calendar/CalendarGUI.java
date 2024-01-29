@@ -19,6 +19,7 @@ public class CalendarGUI {
     private Map<String, DefaultListModel<String>> eventLists;
     private JComboBox<String> listSelector;
     private JList<String> eventsList;
+    private JLabel currentTimeLabel;
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -45,6 +46,15 @@ public class CalendarGUI {
 
         eventsList = new JList<>();
         JScrollPane listScrollPane = new JScrollPane(eventsList);
+
+        currentTimeLabel = new JLabel();
+        Timer clockTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateTimeLabel();
+            }
+        });
+        clockTimer.start();
 
         JButton loadButton = new JButton("Load Events");
         loadButton.addActionListener(new ActionListener() {
@@ -120,6 +130,7 @@ public class CalendarGUI {
 
         frame.getContentPane().add(topPanel, BorderLayout.NORTH);
         frame.getContentPane().add(listScrollPane, BorderLayout.CENTER);
+        frame.getContentPane().add(currentTimeLabel, BorderLayout.SOUTH);
 
         frame.pack();
         frame.setLocationRelativeTo(null);
@@ -141,6 +152,11 @@ public class CalendarGUI {
             currentListModel.addElement((String) event);
         }
         eventsList.setModel(currentListModel);
+    }
+
+    private void updateTimeLabel() {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        currentTimeLabel.setText("Current Time: " + timeFormat.format(new Date()));
     }
 
     private void showNewEventDialog() {
@@ -224,6 +240,7 @@ public class CalendarGUI {
             updateEventList(eventLists.get(selectedList).toArray());
         }
     }
+
     private void checkReminders() {
         String selectedList = (String) listSelector.getSelectedItem();
         DefaultListModel<String> currentListModel = eventLists.get(selectedList);
