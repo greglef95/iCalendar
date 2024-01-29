@@ -182,7 +182,7 @@ public class CalendarGUI {
     }
 
     private void updateTimeLabel() {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
         currentTimeLabel.setText("Current Time: " + timeFormat.format(new Date()));
     }
 
