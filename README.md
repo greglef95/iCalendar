@@ -1,5 +1,10 @@
 # iCalendar App
 
+### Clone Git URL
+```
+https://github.com/greglef95/iCalendar.git
+```
+
 ## Table of Contents
 
 - [Terminal App - Part1](#part1)
@@ -163,6 +168,11 @@ Requirements
 
 License Information
 -------------------
+
+### Clone Git URL
+```
+https://github.com/greglef95/iCalendar.git
+```
 
 The software developed under the auspices of the Department of Informatics and Telecommunications (DIT) at the University of Athens (HUA).
 
