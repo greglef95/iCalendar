@@ -126,18 +126,9 @@ The iCalendar App is a Java-based interactive calendar application built using S
 - **Sorting:** Sort events either by time or by name for better organization.
 - **Reminders:** Receive reminders for events scheduled within the next 5 minutes.
 
-## Getting Started
+## How to RUN the Program?
 
 To run the application, execute the `main` method in the `CalendarGUI` class.
-
-```java
-public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> {
-        CalendarGUI app = new CalendarGUI();
-        app.createAndShowGUI();
-    });
-}
-```
 
 ## Usage
 
