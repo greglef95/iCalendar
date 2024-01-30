@@ -36,7 +36,7 @@ public class CalendarGUI {
     }
 
     private void createAndShowGUI() {
-        JFrame frame = new JFrame("Event Loader App");
+        JFrame frame = new JFrame("iCalendar App by Greg, Giannis and Christos");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         eventLists = new HashMap<>();
@@ -154,7 +154,7 @@ public class CalendarGUI {
         frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().add(topPanel, BorderLayout.NORTH);
         frame.getContentPane().add(listScrollPane, BorderLayout.CENTER);
-        frame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);  // Added bottom panel
+        frame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
 
         frame.pack();
         frame.setLocationRelativeTo(null);
