@@ -111,14 +111,6 @@ public class CalendarGUI {
             }
         });
 
-        JButton changeListButton = new JButton("Change List");
-        changeListButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showChangeListDialog();
-            }
-        });
-
         JButton sortButton = new JButton("Sort Events");
         sortButton.addActionListener(new ActionListener() {
             @Override
@@ -142,7 +134,6 @@ public class CalendarGUI {
         topPanel.add(newEventButton);
         topPanel.add(editEventButton);
         topPanel.add(completeTaskButton);
-        topPanel.add(changeListButton);
         topPanel.add(sortButton);
 
         //bottom panel styling
