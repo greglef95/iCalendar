@@ -1,14 +1,16 @@
-CalendarApp
-===========
+# Part 1
+## Terminal App
 
+---
 The CalendarApp is a Java-based project designed to manage calendars, events, and tasks using .ics files. 
 
 It leverages UTF-8 encoding and Maven for project management.
 
-Getting Started
----------------
+### Getting Started
 
-### 1. Installation
+---
+
+#### 1. Installation
 
 1.  Run the Main Class to create a `.target` folder in your project.
 
@@ -17,9 +19,9 @@ Getting Started
 3.  Use the following command to create the necessary JAR file: `mvn clean install`
 
 
-### 2. Run the CalendarApp?
+#### 2. Run the CalendarApp?
 
-#### View Calendar Events
+### View Calendar Events
 
 To view events in the calendar based on different timeframes (day, week, month, pastday, pastweek, pastmonth, due, todo), execute the following command:
 
@@ -34,7 +36,7 @@ java -jar target/CalendarApp-1.0-SNAPSHOT.jar month oop2.ics
 ```
 Replace `<timeframe>` with one of the options mentioned above and `<your-ics-file>` with the .ics file name. If the file is not in the project folder, provide the absolute path.
 
-### 3. Create or Update Calendar
+#### 3. Create or Update Calendar
 
 To create a new calendar or update an existing one with events/tasks, use:
 
@@ -44,7 +46,7 @@ java -jar target/CalendarApp-1.0-SNAPSHOT.jar <your-ics-file>
 
 Replace `<your-ics-file>` with the .ics file name. If the file is not in the project folder, provide the absolute path. If the file doesn't exist, the app will create it and add new events/tasks; otherwise, it will update the existing file.
 
-# -------------------------------------------------------
+---
 
 
 
@@ -98,9 +100,9 @@ Replace `<your-ics-file>` with the .ics file name. If the file is not in the pro
     -   Catches and displays specific error messages for argument and file-related issues.
     
 
-# ______________________________
-
-# iCalendar App
+---
+# Part 2
+## iCalendar App (GUI Version)
 
 ## Overview
 
@@ -149,8 +151,8 @@ public static void main(String[] args) {
 
 The external file should contain events in each line with the following format:
 
-```bash
-yyyy-MM-dd HH:mm EventName
+```text
+dd-MM-yyyy HH:mm EventName
 ```
 Requirements
 
@@ -158,8 +160,8 @@ Requirements
 
 ## Libraries Used
 
-- Toedter JDateChooser for date input.
-- Java Swing for the graphical user interface.
+- <b> Toedter JDateChooser </b> to give user the ability to choose date input as Calendar.
+- <b> Java Swing </b> for the graphical user interface.
 
 License Information
 -------------------
