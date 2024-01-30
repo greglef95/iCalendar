@@ -1,5 +1,6 @@
 package gr.hua.dit.oop2.calendar;
 
+import com.toedter.calendar.JDateChooser;
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
@@ -129,7 +130,7 @@ public class CalendarGUI {
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout());
-        topPanel.add(listSelector);
+     // topPanel.add(listSelector);
         topPanel.add(loadButton);
         topPanel.add(newEventButton);
         topPanel.add(editEventButton);
@@ -182,7 +183,7 @@ public class CalendarGUI {
 
         JTextField eventNameField = new JTextField(20);
         JTextField eventTimeField = new JTextField(5);
-        JTextField eventDateField = new JTextField(10);
+        JDateChooser dateChooser = new JDateChooser();
 
         JButton addButton = new JButton("Add Event");
 
@@ -191,7 +192,10 @@ public class CalendarGUI {
             public void actionPerformed(ActionEvent e) {
                 String eventName = eventNameField.getText();
                 String eventTime = eventTimeField.getText();
-                String eventDate = eventDateField.getText();
+
+                // Retrieve the selected date from JDateChooser
+                Date selectedDate = dateChooser.getDate();
+                String eventDate = new SimpleDateFormat("dd-MM-yyyy").format(selectedDate);
 
                 if (!eventName.isEmpty() && isValidTimeFormat(eventTime) && isValidDateFormat(eventDate)) {
                     String newEvent = eventDate + " " + eventTime + " " + eventName;
@@ -203,7 +207,7 @@ public class CalendarGUI {
                     newEventDialog.dispose();
                 } else {
                     JOptionPane.showMessageDialog(newEventDialog, "Invalid input. Event name cannot be empty, " +
-                            "time should be in HH:mm format, and date should be in yyyy-MM-dd format.");
+                            "time should be in HH:mm format, and date should be in dd-MM-yyyy format.");
                 }
             }
         });
@@ -213,11 +217,11 @@ public class CalendarGUI {
         newEventDialog.add(eventNameField);
         newEventDialog.add(new JLabel("Event Time (HH:mm):"));
         newEventDialog.add(eventTimeField);
-        newEventDialog.add(new JLabel("Event Date (yyyy-MM-dd):"));
-        newEventDialog.add(eventDateField);
+        newEventDialog.add(new JLabel("Event Date:"));
+        newEventDialog.add(dateChooser);
         newEventDialog.add(addButton);
 
-        newEventDialog.setSize(350, 150);
+        newEventDialog.setSize(400, 200);
         newEventDialog.setLocationRelativeTo(null);
         newEventDialog.setVisible(true);
     }
@@ -234,7 +238,7 @@ public class CalendarGUI {
 
     private boolean isValidDateFormat(String date) {
         try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
             dateFormat.setLenient(false);
 
             dateFormat.parse(date);
@@ -257,12 +261,60 @@ public class CalendarGUI {
         String selectedEvent = eventsList.getSelectedValue();
 
         if (selectedEvent != null) {
-            String editedEvent = JOptionPane.showInputDialog("Edit Event:", selectedEvent);
+            // Split the selected event to get date, time, and name
+            String[] parts = selectedEvent.split("\\s+", 3);
 
-            if (editedEvent != null && !editedEvent.isEmpty()) {
-                currentListModel.setElementAt(editedEvent, eventsList.getSelectedIndex());
-                updateEventList(currentListModel.toArray());
+            // Create components for editing
+            JTextField eventNameField = new JTextField(parts[2]);
+            JTextField eventTimeField = new JTextField(parts[1]);
+            JDateChooser dateChooser = new JDateChooser();
+            try {
+                Date eventDate = new SimpleDateFormat("yyyy-MM-dd").parse(parts[0]);
+                dateChooser.setDate(eventDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+
+            // Create and show the edit event dialog
+            JDialog editEventDialog = new JDialog();
+            editEventDialog.setTitle("Edit Event");
+
+            JButton editButton = new JButton("Edit Event");
+
+            editButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String eventName = eventNameField.getText();
+                    String eventTime = eventTimeField.getText();
+
+                    // Retrieve the selected date from JDateChooser
+                    Date selectedDate = dateChooser.getDate();
+                    String eventDate = new SimpleDateFormat("dd-MM-yyyy").format(selectedDate);
+
+                    if (!eventName.isEmpty() && isValidTimeFormat(eventTime) && isValidDateFormat(eventDate)) {
+                        String editedEvent = eventDate + " " + eventTime + " " + eventName;
+                        currentListModel.setElementAt(editedEvent, eventsList.getSelectedIndex());
+                        updateEventList(currentListModel.toArray());
+                        editEventDialog.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(editEventDialog, "Invalid input. Event name cannot be empty, " +
+                                "time should be in HH:mm format, and date should be in dd-MM-yyyy format.");
+                    }
+                }
+            });
+
+            editEventDialog.setLayout(new FlowLayout());
+            editEventDialog.add(new JLabel("Event Name:"));
+            editEventDialog.add(eventNameField);
+            editEventDialog.add(new JLabel("Event Time (HH:mm):"));
+            editEventDialog.add(eventTimeField);
+            editEventDialog.add(new JLabel("Event Date:"));
+            editEventDialog.add(dateChooser);
+            editEventDialog.add(editButton);
+
+            editEventDialog.setSize(400, 200);
+            editEventDialog.setLocationRelativeTo(null);
+            editEventDialog.setVisible(true);
         }
     }
 
@@ -323,6 +375,12 @@ public class CalendarGUI {
                 sortByTime(model);
                 break;
         }
+        DefaultListModel<String> sortedModel = new DefaultListModel<>();
+        Enumeration<String> elements = model.elements();
+        while (elements.hasMoreElements()) {
+            sortedModel.addElement(elements.nextElement());
+        }
+        eventsList.setModel(model);
     }
 
     private void sortByTime(DefaultListModel<String> model) {
