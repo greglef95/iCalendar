@@ -135,17 +135,13 @@ public class CalendarGUI {
         topPanel.add(editEventButton);
         topPanel.add(completeTaskButton);
         topPanel.add(sortButton);
-
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.add(currentDateLabel, BorderLayout.NORTH);
         bottomPanel.add(currentTimeLabel, BorderLayout.SOUTH);
-
-
         frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().add(topPanel, BorderLayout.NORTH);
         frame.getContentPane().add(listScrollPane, BorderLayout.CENTER);
         frame.getContentPane().add(bottomPanel, BorderLayout.SOUTH);
-
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
