@@ -96,8 +96,70 @@ Replace `<your-ics-file>` with the .ics file name. If the file is not in the pro
     -   Validates the number of arguments provided.
     -   Checks if the file path ends with ".ics" for compatibility.
     -   Catches and displays specific error messages for argument and file-related issues.
+    
 
+# ______________________________
 
+# iCalendar App
+
+## Overview
+
+The iCalendar App is a Java-based interactive calendar application built using Swing GUI components. It enables users to manage events, load events from external files, create new events, edit existing events, complete tasks, and sort events based on time or name.
+
+## Table of Contents
+
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [File Format](#file-format)
+- [Requirements](#requirements)
+- [Libraries Used](#libraries-used)
+- [Contributors](#contributors)
+- [License](#license)
+
+## Features
+
+- **Event Management:** Create, edit, and complete events in an interactive environment.
+- **Load Events:** Load events from an external file to populate the calendar.
+- **Sorting:** Sort events either by time or by name for better organization.
+- **Reminders:** Receive reminders for events scheduled within the next 5 minutes.
+
+## Getting Started
+
+To run the application, execute the `main` method in the `CalendarGUI` class.
+
+```java
+public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+        CalendarGUI app = new CalendarGUI();
+        app.createAndShowGUI();
+    });
+}
+```
+
+## Usage
+
+ - <b> Load Events </b> : Click the "Load Events" button to load events from an external file.
+ - <b> New Event </b> : Click the "New Event" button to create a new event. Enter event details such as name, time, and date.
+ - <b> Edit Event </b>: Select an event and click the "Edit Event" button to modify its details.
+ - <b> Complete Task </b> : Select an event and click the "Complete Task" button to mark it as completed.
+ - <b> Sort Events </b> : Click the "Sort Events" button to choose between sorting events by time or by name.
+
+## File Format
+
+The external file should contain events in each line with the following format:
+
+```bash
+yyyy-MM-dd HH:mm EventName
+```
+Requirements
+
+- Java SE Development Kit (JDK) 8 or later.
+
+## Libraries Used
+
+- Toedter JDateChooser for date input.
+- Java Swing for the graphical user interface.
 
 License Information
 -------------------
