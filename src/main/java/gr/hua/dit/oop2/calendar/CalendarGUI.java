@@ -136,7 +136,6 @@ public class CalendarGUI {
         topPanel.add(completeTaskButton);
         topPanel.add(sortButton);
 
-        //bottom panel styling
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.add(currentDateLabel, BorderLayout.NORTH);
         bottomPanel.add(currentTimeLabel, BorderLayout.SOUTH);
@@ -168,7 +167,6 @@ public class CalendarGUI {
         }
         eventsList.setModel(currentListModel);
 
-        // Sort the events based on the current sort option
         sortEvents(currentListModel);
     }
 
@@ -188,7 +186,7 @@ public class CalendarGUI {
 
         JTextField eventNameField = new JTextField(20);
         JTextField eventTimeField = new JTextField(5);
-        JTextField eventDateField = new JTextField(10);  // Added field for event date
+        JTextField eventDateField = new JTextField(10);
 
         JButton addButton = new JButton("Add Event");
 
@@ -197,7 +195,7 @@ public class CalendarGUI {
             public void actionPerformed(ActionEvent e) {
                 String eventName = eventNameField.getText();
                 String eventTime = eventTimeField.getText();
-                String eventDate = eventDateField.getText();  // Get the event date
+                String eventDate = eventDateField.getText();
 
                 if (!eventName.isEmpty() && isValidTimeFormat(eventTime) && isValidDateFormat(eventDate)) {
                     String newEvent = eventDate + " " + eventTime + " " + eventName;
@@ -205,7 +203,6 @@ public class CalendarGUI {
                     DefaultListModel<String> currentListModel = eventLists.get(selectedList);
                     currentListModel.addElement(newEvent);
 
-                    // Update the event list and sort by time
                     updateEventList(currentListModel.toArray());
                     newEventDialog.dispose();
                 } else {
@@ -244,10 +241,8 @@ public class CalendarGUI {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             dateFormat.setLenient(false);
 
-            // Attempt to parse the entire date string
             dateFormat.parse(date);
 
-            // If parsing succeeds without throwing an exception, the date is valid
             return true;
         } catch (ParseException e) {
             return false;
@@ -291,7 +286,7 @@ public class CalendarGUI {
             updateEventList(currentListModel.toArray());
         }
     }
-
+/*
     private void showChangeListDialog() {
         Object[] options = eventLists.keySet().toArray();
         String selectedList = (String) JOptionPane.showInputDialog(null,
@@ -303,7 +298,7 @@ public class CalendarGUI {
             updateEventList(eventLists.get(selectedList).toArray());
         }
     }
-
+*/
     private void showSortOptionsDialog() {
         Object[] options = {"Sort by Time", "Sort by Name"};
         int selectedOption = JOptionPane.showOptionDialog(null,
@@ -316,7 +311,6 @@ public class CalendarGUI {
             currentSortOption = SortOption.BY_NAME;
         }
 
-        // Re-sort events based on the new sort option
         DefaultListModel<String> currentListModel = eventLists.get(listSelector.getSelectedItem());
         sortEvents(currentListModel);
     }
@@ -330,7 +324,6 @@ public class CalendarGUI {
                 sortByName(model);
                 break;
             default:
-                // Default to sorting by time
                 sortByTime(model);
                 break;
         }
@@ -364,12 +357,12 @@ public class CalendarGUI {
 
         if (!currentListModel.isEmpty()) {
             Date now = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");  // Updated format
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
             for (int i = 0; i < currentListModel.getSize(); i++) {
                 String event = currentListModel.getElementAt(i);
                 try {
-                    String eventTimeStr = event.substring(0, 16); // Assuming time is at the beginning (e.g., "2024-01-30 12:30 Event")
+                    String eventTimeStr = event.substring(0, 16);
                     Date eventTime = dateFormat.parse(eventTimeStr);
 
                     if (now.before(eventTime)) {
@@ -381,7 +374,6 @@ public class CalendarGUI {
                         }
                     }
                 } catch (Exception e) {
-                    // Handle parsing exceptions or unexpected event format
                     e.printStackTrace();
                 }
             }
