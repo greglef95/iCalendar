@@ -1,4 +1,11 @@
-# Part 1
+# iCalendar App
+
+## Table of Contents
+
+- [Terminal App - Part1](#part1)
+- [GUI App - Part 2](#part2)
+
+# part1
 ## Terminal App
 
 ---
@@ -101,7 +108,7 @@ Replace `<your-ics-file>` with the .ics file name. If the file is not in the pro
     
 
 ---
-# Part 2
+# part2
 ## iCalendar App (GUI Version)
 
 ## Overview
